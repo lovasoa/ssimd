@@ -14,6 +14,20 @@ fn test_replace_extract() {
 }
 
 #[test]
+fn test_shr() {
+    let mut v = [0; 4];
+    (i32x4::new(0, 1, 2, 3) << 1u32).write_to_slice_aligned(&mut v);
+    assert_eq!(v, [0, 2, 4, 6]);
+}
+
+#[test]
+fn test_shl() {
+    let mut v = [0; 4];
+    (i32x4::new(0, 1, 2, 3) >> 1u32).write_to_slice_aligned(&mut v);
+    assert_eq!(v, [0, 0, 1, 1]);
+}
+
+#[test]
 fn test_shift() {
     let mut v = [0; 4];
     (i32x4::new(1, 2, 3, 4) >> 2).store(&mut v, 0);

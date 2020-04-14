@@ -459,19 +459,19 @@ macro_rules! int_impls {
         })*
         
         /// Shift left trait (<<)
-        $(impl Shl<usize> for $name {
+        $(impl Shl<u32> for $name {
             type Output = Self;
             #[inline(always)]
-            fn shl(self, sz: usize) -> Self {
+            fn shl(self, sz: u32) -> Self {
                 $name($(self.$index << (sz as $elem)),*)
             }
         })*
         
         /// Shift right trait (>>)
-        $(impl Shr<usize> for $name {
+        $(impl Shr<u32> for $name {
             type Output = Self;
             #[inline(always)]
-            fn shr(self, sz: usize) -> Self {
+            fn shr(self, sz: u32) -> Self {
                 $name($(self.$index >> (sz as $elem)),*)
             }
         })*
