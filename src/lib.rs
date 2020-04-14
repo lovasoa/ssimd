@@ -217,7 +217,31 @@ macro_rules! basic_impls {
             pub fn load(array: &[$elem], idx: usize) -> Self {
                 $name($(array[idx + $index]),*)
             }
-            
+
+            /// Instantiates a new vector with the values of the slice.
+            #[inline(always)]
+            pub fn from_slice_aligned(slice: &[$elem]) -> Self {
+                $name($(slice[$index]),*)
+            }
+
+            /// Instantiates a new vector with the values of the slice.
+            #[inline(always)]
+            pub fn from_slice_unaligned(slice: &[$elem]) -> Self {
+                Self::from_slice_aligned(slice)
+            }
+
+            /// Instantiates a new vector with the values of the slice.
+            #[inline(always)]
+            pub unsafe fn from_slice_aligned_unchecked(slice: &[$elem]) -> Self {
+                $name($(*slice.get_unchecked($index)),*)
+            }
+
+            /// Instantiates a new vector with the values of the slice.
+            #[inline(always)]
+            pub unsafe fn from_slice_unaligned_unchecked(slice: &[$elem]) -> Self {
+                Self::from_slice_aligned_unchecked(slice)
+            }
+
             /// Store self to an array
             #[inline(always)]
             pub fn store(self, array: &mut [$elem], idx: usize) {
