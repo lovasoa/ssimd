@@ -24,6 +24,36 @@ pub struct f32x2(f32, f32);
 #[derive(Debug, Clone, Copy)]
 pub struct bool32x2(i32, i32);
 
+/// 4x8-bit vectors
+#[repr(packed)]
+#[derive(Debug, Clone, Copy)]
+pub struct u8x4(u8, u8, u8, u8);
+
+/// 4x8-bit vectors
+#[repr(packed)]
+#[derive(Debug, Clone, Copy)]
+pub struct i8x4(i8, i8, i8, i8);
+
+/// 4x8-bit vectors
+#[repr(packed)]
+#[derive(Debug, Clone, Copy)]
+pub struct bool8x4(i8, i8, i8, i8);
+
+/// 4x16-bit vectors
+#[repr(packed)]
+#[derive(Debug, Clone, Copy)]
+pub struct u16x4(u16, u16, u16, u16);
+
+/// 4x16-bit vectors
+#[repr(packed)]
+#[derive(Debug, Clone, Copy)]
+pub struct i16x4(i16, i16, i16, i16);
+
+/// 4x16-bit vectors
+#[repr(packed)]
+#[derive(Debug, Clone, Copy)]
+pub struct bool16x4(i16, i16, i16, i16);
+
 /// 4x32-bit vectors
 #[repr(packed)]
 #[derive(Debug, Clone, Copy)]
@@ -383,6 +413,10 @@ basic_impls! {
     i32x2:i32, bool32x2:i32, 2, 0:x0, 1:x1;
     f32x2:f32, bool32x2:i32, 2, 0:x0, 1:x1;
     
+     u8x4:u8 ,  bool8x4:i8 , 4, 0:x0, 1:x1, 2:x2, 3:x3;
+     i8x4:i8 ,  bool8x4:i8 , 4, 0:x0, 1:x1, 2:x2, 3:x3;
+    u16x4:u16, bool16x4:i16, 4, 0:x0, 1:x1, 2:x2, 3:x3;
+    i16x4:i16, bool16x4:i16, 4, 0:x0, 1:x1, 2:x2, 3:x3;
     u32x4:u32, bool32x4:i32, 4, 0:x0, 1:x1, 2:x2, 3:x3;
     i32x4:i32, bool32x4:i32, 4, 0:x0, 1:x1, 2:x2, 3:x3;
     f32x4:f32, bool32x4:i32, 4, 0:x0, 1:x1, 2:x2, 3:x3;
@@ -500,10 +534,14 @@ macro_rules! int_impls {
 int_impls! {
     u32x2:u32,  0:x0, 1:x1;
     i32x2:i32,  0:x0, 1:x1;
-    
+
+     u8x4:u8 ,  0:x0, 1:x1, 2:x2, 3:x3;
+     i8x4:i8 ,  0:x0, 1:x1, 2:x2, 3:x3;
+    u16x4:u16,  0:x0, 1:x1, 2:x2, 3:x3;
+    i16x4:i16,  0:x0, 1:x1, 2:x2, 3:x3;
     u32x4:u32,  0:x0, 1:x1, 2:x2, 3:x3;
     i32x4:i32,  0:x0, 1:x1, 2:x2, 3:x3;
-    
+
      u8x8:u8 ,  0:x0, 1:x1, 2:x2, 3:x3, 4:x4, 5:x5, 6:x6, 7:x7;
      i8x8:i8 ,  0:x0, 1:x1, 2:x2, 3:x3, 4:x4, 5:x5, 6:x6, 7:x7;
     u16x8:u16,  0:x0, 1:x1, 2:x2, 3:x3, 4:x4, 5:x5, 6:x6, 7:x7;
@@ -608,6 +646,8 @@ macro_rules! bool_impls {
 bool_impls! {
     bool32x2:i32, 2,    0:x0, 1:x1;
     bool32x4:i32, 4,    0:x0, 1:x1 , 2:x2, 3:x3;
+     bool8x4:i8 , 4,    0:x0, 1:x1 , 2:x2, 3:x3;
+    bool16x4:i16, 4,    0:x0, 1:x1 , 2:x2, 3:x3;
 
      bool8x8:i8 , 8,    0:x0, 1:x1 , 2:x2, 3:x3, 4:x4, 5:x5, 6:x6, 7:x7;
     bool16x8:i16, 8,    0:x0, 1:x1 , 2:x2, 3:x3, 4:x4, 5:x5, 6:x6, 7:x7;

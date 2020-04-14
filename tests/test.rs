@@ -46,3 +46,10 @@ fn test_panic_store() {
     let mut v = [0i16; 3];
     i16x8::splat(0).write_to_slice_aligned(&mut v);
 }
+
+#[test]
+fn test_i16x4() {
+    let v: [i16; 4] = [-1, 3, 1, 2];
+    assert_eq!(i16x4::from_slice_unaligned(&v).gt(i16x4::splat(0)).all(), false);
+    assert_eq!(i16x4::from_slice_unaligned(&v).lt(i16x4::splat(4)).all(), true);
+}
