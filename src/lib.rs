@@ -192,7 +192,7 @@ macro_rules! basic_impls {
             
             /// Get the `idx`th lane value
             #[inline(always)]
-            pub fn extract(self, idx: u32) -> $elem {
+            pub fn extract(self, idx: usize) -> $elem {
                 assert!(idx < $length);
                 unsafe {
                     let p = (&self) as *const _ as *const $elem;
@@ -202,7 +202,7 @@ macro_rules! basic_impls {
             
             /// Replace the `idx`th lane with new value
             #[inline(always)]
-            pub fn replace(self, idx: u32, elem: $elem) -> Self {
+            pub fn replace(self, idx: usize, elem: $elem) -> Self {
                 assert!(idx < $length);
                 unsafe {
                     let mut ret = self;
@@ -510,7 +510,7 @@ macro_rules! bool_impls {
             
             /// Get the `idx`th lane value
             #[inline(always)]
-            pub fn extract(self, idx: u32) -> $elem {
+            pub fn extract(self, idx: usize) -> $elem {
                 assert!(idx < $length);
                 unsafe {
                     let p = (&self) as *const _ as *const $elem;
@@ -520,7 +520,7 @@ macro_rules! bool_impls {
             
             /// Replace the `idx`th lane with new value
             #[inline(always)]
-            pub fn replace(self, idx: u32, elem: $elem) -> Self {
+            pub fn replace(self, idx: usize, elem: $elem) -> Self {
                 assert!(idx < $length);
                 unsafe {
                     let mut ret = self;

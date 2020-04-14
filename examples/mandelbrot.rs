@@ -108,7 +108,10 @@ fn main() {
                 let x = f32x4::splat(left + width_step * j as f32) + adjust;
                 let ret = mandelbrot_vector(x, y, LIMIT);
                 //test::black_box(ret);
-                for k in 0..4 { let val = ret.extract(k as u32); output_one(&mut line[3*(j + k)..3*(j + k + 1)], val); }
+                for k in 0..4 {
+                    let val = ret.extract(k);
+                    output_one(&mut line[3*(j + k)..3*(j + k + 1)], val);
+                }
             }
             ::std::io::stdout().write(&line).unwrap();
         }
