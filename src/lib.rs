@@ -2,6 +2,8 @@
 // Inspired by crate `simd` developed for nightly Channel
 // Reference link : https://github.com/rust-lang-nursery/simd
 
+#![allow(clippy::too_many_arguments)]
+
 #![allow(non_camel_case_types)]
 use std::ops::{Add, Sub, Mul, Div, BitAnd, BitOr, BitXor, Not, Shl, Shr};
 
@@ -613,7 +615,7 @@ macro_rules! conv_impls {
     }
 }
 
-/// Conversion among types
+// Conversion among types
 conv_impls! {
     to_i, u32x2 : u32 -> i32x2 : i32,       0:x0, 1:x1;
     to_i, f32x2 : f32 -> i32x2 : i32,       0:x0, 1:x1;    

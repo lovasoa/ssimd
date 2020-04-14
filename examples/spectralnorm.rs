@@ -4,6 +4,7 @@
 extern crate ssimd;
 use ssimd::f64x2;
 
+#[allow(non_snake_case)]
 fn A(i: usize, j: usize) -> f64 {
     ((i + j) * (i + j + 1) / 2 + i + 1) as f64
 }
@@ -12,6 +13,7 @@ fn dot(x: &[f64], y: &[f64]) -> f64 {
     x.iter().zip(y).map(|(&x, &y)| x * y).fold(0.0, |a, b| a + b)
 }
 
+#[allow(non_snake_case)]
 fn mult_Av(v: &[f64], out: &mut [f64]) {
     assert!(v.len() == out.len());
     assert!(v.len() % 2 == 0);
@@ -30,6 +32,7 @@ fn mult_Av(v: &[f64], out: &mut [f64]) {
     }
 }
 
+#[allow(non_snake_case)]
 fn mult_Atv(v: &[f64], out: &mut [f64]) {
     assert!(v.len() == out.len());
     assert!(v.len() % 2 == 0);
@@ -48,6 +51,7 @@ fn mult_Atv(v: &[f64], out: &mut [f64]) {
     }
 }
 
+#[allow(non_snake_case)]
 fn mult_AtAv(v: &[f64], out: &mut [f64], tmp: &mut [f64]) {
     mult_Av(v, tmp);
     mult_Atv(tmp, out);
