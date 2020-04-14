@@ -22,9 +22,9 @@ fn test_shr() {
 
 #[test]
 fn test_shl() {
-    let mut v = [0; 4];
-    (i32x4::new(0, 1, 2, 3) >> 1u32).write_to_slice_aligned(&mut v);
-    assert_eq!(v, [0, 0, 1, 1]);
+    let mut v = [0u8; 8];
+    (u8x8::new(0, 1, 2, 3, 4, 5, 6, 7) >> 1u32).write_to_slice_aligned(&mut v);
+    assert_eq!(v, [0, 0, 1, 1, 2, 2, 3, 3]);
 }
 
 #[test]

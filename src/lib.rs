@@ -41,6 +41,18 @@ pub struct f32x4(f32, f32, f32, f32);
 #[derive(Debug, Clone, Copy)]
 pub struct bool32x4(i32, i32, i32, i32);
 
+/// 8x8-bit integer vectors
+#[repr(packed)]
+#[derive(Debug, Clone, Copy)]
+pub struct u8x8(u8, u8, u8, u8,
+                 u8, u8, u8, u8);
+
+/// 8x8-bit integer vectors
+#[repr(packed)]
+#[derive(Debug, Clone, Copy)]
+pub struct i8x8(i8, i8, i8, i8,
+                 i8, i8, i8, i8);
+
 /// 16x8-bit integer vectors
 #[repr(packed)]
 #[derive(Debug, Clone, Copy)]
@@ -52,6 +64,11 @@ pub struct u16x8(u16, u16, u16, u16,
 pub struct i16x8(i16, i16, i16, i16,
                  i16, i16, i16, i16);
                  
+#[repr(packed)]
+#[derive(Debug, Clone, Copy)]
+pub struct bool8x8(i8, i8, i8, i8,
+                     i8, i8, i8, i8);
+
 #[repr(packed)]
 #[derive(Debug, Clone, Copy)]
 pub struct bool16x8(i16, i16, i16, i16,
@@ -370,6 +387,8 @@ basic_impls! {
     i32x4:i32, bool32x4:i32, 4, 0:x0, 1:x1, 2:x2, 3:x3;
     f32x4:f32, bool32x4:i32, 4, 0:x0, 1:x1, 2:x2, 3:x3;
     
+     u8x8:u8 , bool8x8 :i8 , 8, 0:x0, 1:x1, 2:x2, 3:x3, 4:x4, 5:x5, 6:x6, 7:x7;
+     i8x8:i8 , bool8x8 :i8 , 8, 0:x0, 1:x1, 2:x2, 3:x3, 4:x4, 5:x5, 6:x6, 7:x7;
     u16x8:u16, bool16x8:i16, 8, 0:x0, 1:x1, 2:x2, 3:x3, 4:x4, 5:x5, 6:x6, 7:x7;
     i16x8:i16, bool16x8:i16, 8, 0:x0, 1:x1, 2:x2, 3:x3, 4:x4, 5:x5, 6:x6, 7:x7;
    
@@ -485,9 +504,11 @@ int_impls! {
     u32x4:u32,  0:x0, 1:x1, 2:x2, 3:x3;
     i32x4:i32,  0:x0, 1:x1, 2:x2, 3:x3;
     
+     u8x8:u8 ,  0:x0, 1:x1, 2:x2, 3:x3, 4:x4, 5:x5, 6:x6, 7:x7;
+     i8x8:i8 ,  0:x0, 1:x1, 2:x2, 3:x3, 4:x4, 5:x5, 6:x6, 7:x7;
     u16x8:u16,  0:x0, 1:x1, 2:x2, 3:x3, 4:x4, 5:x5, 6:x6, 7:x7;
     i16x8:i16,  0:x0, 1:x1, 2:x2, 3:x3, 4:x4, 5:x5, 6:x6, 7:x7;
-   
+
     u64x2:u64,  0:x0, 1:x1;
     i64x2:i64,  0:x0, 1:x1;
     
@@ -586,9 +607,11 @@ macro_rules! bool_impls {
 
 bool_impls! {
     bool32x2:i32, 2,    0:x0, 1:x1;
-    bool32x4:i32, 4,    0:x0, 1:x1 , 2:x2, 3:x3;    
+    bool32x4:i32, 4,    0:x0, 1:x1 , 2:x2, 3:x3;
+
+     bool8x8:i8 , 8,    0:x0, 1:x1 , 2:x2, 3:x3, 4:x4, 5:x5, 6:x6, 7:x7;
     bool16x8:i16, 8,    0:x0, 1:x1 , 2:x2, 3:x3, 4:x4, 5:x5, 6:x6, 7:x7;
-                    
+
     bool8x16:i8, 16,    0:x0, 1:x1 , 2:x2, 3:x3, 4:x4, 5:x5, 6:x6, 7:x7,
                         8:x8, 9:x9 , 10:x10, 11:x11, 12:x12, 13:x13 ,14:x14, 15:x15;
                     
