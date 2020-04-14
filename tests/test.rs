@@ -1,10 +1,10 @@
 use ssimd::*;
 
 #[test]
-fn test_load_add_store() {
+fn test_load_add_store_int() {
     let mut v = [-1; 8];
     let s = i32x8::from_slice_unaligned(&v) + i32x8::splat(2);
-    s.store(&mut v, 0);
+    s.write_to_slice_aligned(&mut v);
     assert_eq!(v, [1; 8]);
 }
 
@@ -14,7 +14,21 @@ fn test_replace_extract() {
 }
 
 #[test]
+fn test_shift() {
+    let mut v = [0; 4];
+    (i32x4::new(1, 2, 3, 4) >> 2).store(&mut v, 0);
+    assert_eq!(v, [0, 0, 0, 1]);
+}
+
+#[test]
 #[should_panic(expected = "index out of bounds")]
 fn test_panic_load() {
     let _ = i16x8::from_slice_unaligned(&[-1i16; 2]);
+}
+
+#[test]
+#[should_panic(expected = "index out of bounds")]
+fn test_panic_store() {
+    let mut v = [0i16; 3];
+    i16x8::splat(0).write_to_slice_aligned(&mut v);
 }

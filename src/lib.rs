@@ -165,9 +165,69 @@ pub struct i8x32(i8, i8, i8, i8, i8, i8, i8, i8,
 #[repr(packed)]
 #[derive(Debug, Clone, Copy)]
 pub struct bool8x32(i8, i8, i8, i8, i8, i8, i8, i8,
-                     i8, i8, i8, i8, i8, i8, i8, i8,
-                     i8, i8, i8, i8, i8, i8, i8, i8,
-                     i8, i8, i8, i8, i8, i8, i8, i8);
+                    i8, i8, i8, i8, i8, i8, i8, i8,
+                    i8, i8, i8, i8, i8, i8, i8, i8,
+                    i8, i8, i8, i8, i8, i8, i8, i8);
+
+macro_rules! impl_load_store {
+    ($name: ident : $elem: ident, $($index:tt),*) => {
+            /// Load instance from an array
+            #[inline(always)]
+            pub fn load(array: &[$elem], idx: usize) -> Self {
+                $name($(array[idx + $index]),*)
+            }
+
+            /// Instantiates a new vector with the values of the slice.
+            #[inline(always)]
+            pub fn from_slice_aligned(slice: &[$elem]) -> Self {
+                $name($(slice[$index]),*)
+            }
+
+            /// Instantiates a new vector with the values of the slice.
+            #[inline(always)]
+            pub fn from_slice_unaligned(slice: &[$elem]) -> Self {
+                Self::from_slice_aligned(slice)
+            }
+
+            /// Instantiates a new vector with the values of the slice.
+            #[inline(always)]
+            pub unsafe fn from_slice_aligned_unchecked(slice: &[$elem]) -> Self {
+                $name($(*slice.get_unchecked($index)),*)
+            }
+
+            /// Instantiates a new vector with the values of the slice.
+            #[inline(always)]
+            pub unsafe fn from_slice_unaligned_unchecked(slice: &[$elem]) -> Self {
+                Self::from_slice_aligned_unchecked(slice)
+            }
+
+            /// Store self to an array
+            #[inline(always)]
+            pub fn store(self, array: &mut [$elem], idx: usize) {
+                $(array[idx + $index] = self.$index);*
+            }
+
+            /// Writes the values of the vector to the slice.
+            pub fn write_to_slice_aligned(self, slice: &mut [$elem]) {
+                $(slice[$index] = self.$index);*
+            }
+
+            /// Writes the values of the vector to the slice.
+            pub fn write_to_slice_unaligned(self, slice: &mut [$elem]) {
+                self.write_to_slice_aligned(slice)
+            }
+
+            /// Writes the values of the vector to the slice.
+            pub unsafe fn write_to_slice_aligned_unchecked(self, slice: &mut [$elem]) {
+                $(*slice.get_unchecked_mut($index) = self.$index);*
+            }
+
+            /// Writes the values of the vector to the slice.
+            pub unsafe fn write_to_slice_unaligned_unchecked(self, slice: &mut [$elem]) {
+                self.write_to_slice_aligned_unchecked(slice)
+            }
+    }
+}
 
 macro_rules! basic_impls {
     ($(
@@ -211,43 +271,9 @@ macro_rules! basic_impls {
                     ret
                 }
             }
-            
-            /// Load instance from an array
-            #[inline(always)]
-            pub fn load(array: &[$elem], idx: usize) -> Self {
-                $name($(array[idx + $index]),*)
-            }
 
-            /// Instantiates a new vector with the values of the slice.
-            #[inline(always)]
-            pub fn from_slice_aligned(slice: &[$elem]) -> Self {
-                $name($(slice[$index]),*)
-            }
+            impl_load_store!{$name: $elem, $($index),*}
 
-            /// Instantiates a new vector with the values of the slice.
-            #[inline(always)]
-            pub fn from_slice_unaligned(slice: &[$elem]) -> Self {
-                Self::from_slice_aligned(slice)
-            }
-
-            /// Instantiates a new vector with the values of the slice.
-            #[inline(always)]
-            pub unsafe fn from_slice_aligned_unchecked(slice: &[$elem]) -> Self {
-                $name($(*slice.get_unchecked($index)),*)
-            }
-
-            /// Instantiates a new vector with the values of the slice.
-            #[inline(always)]
-            pub unsafe fn from_slice_unaligned_unchecked(slice: &[$elem]) -> Self {
-                Self::from_slice_aligned_unchecked(slice)
-            }
-
-            /// Store self to an array
-            #[inline(always)]
-            pub fn store(self, array: &mut [$elem], idx: usize) {
-                $(array[idx + $index] = self.$index);*
-            }
-            
             /// Compare if equal
             #[inline(always)]
             pub fn eq(self, rhs: Self) -> $bool_name {
@@ -529,25 +555,16 @@ macro_rules! bool_impls {
                     ret
                 }
             }
-            
-            /// Load instance from an array
-            #[inline(always)]
-            pub fn load(array: &[$elem], idx: usize) -> Self {
-                $name($(array[idx + $index]),*)
-            }
-            
-            /// Store self to an array
-            #[inline(always)]
-            pub fn store(self, array: &mut [$elem], idx: usize) {
-                $(array[idx + $index] = self.$index);*
-            }
-            
+
+            impl_load_store!{$name: $elem, $($index),*}
+
             /// Check if all lanes are true
             #[inline(always)]
             pub fn all(self) -> bool {
                 $((self.$index != 0)) && *
             }
-            
+
+
             /// Check if at least one lane is true
             #[inline(always)]
             pub fn any(self) -> bool {
