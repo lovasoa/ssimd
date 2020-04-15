@@ -761,6 +761,7 @@ macro_rules! conv_impls {
             
         $(
         impl $from_name {
+            #[inline(always)]
             pub fn $cvt(self) -> $to_name {
                 $to_name($(self.$index as $to_elem), *)
             }
@@ -768,12 +769,14 @@ macro_rules! conv_impls {
 
         impl From<$from_name> for $to_name {
             /// Warning ! The conversion can be lossy
+            #[inline(always)]
             fn from(source: $from_name) -> $to_name {
                 source.$cvt()
             }
         }
 
         impl FromCast<$from_name> for $to_name {
+            #[inline(always)]
             fn from_cast(source: $from_name) -> $to_name {
                 source.$cvt()
             }
