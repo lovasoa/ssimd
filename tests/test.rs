@@ -35,6 +35,20 @@ fn test_shift() {
 }
 
 #[test]
+fn test_conversion() {
+    let mut v = [0; 4];
+    i32x4::from(i16x4::new(1, 2, 3, 4)).store(&mut v, 0);
+    assert_eq!(v, [1, 2, 3, 4]);
+}
+
+#[test]
+fn test_cast() {
+    let mut v = [0u8; 4];
+    u8x4::from_cast(i32x4::new(1, 2, 3, 4)).store(&mut v, 0);
+    assert_eq!(v, [1, 2, 3, 4]);
+}
+
+#[test]
 #[should_panic(expected = "index out of bounds")]
 fn test_panic_load() {
     let _ = i16x8::from_slice_unaligned(&[-1i16; 2]);

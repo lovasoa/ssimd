@@ -459,7 +459,7 @@ macro_rules! int_impls {
     ($(
         $name: ident : $elem: ident, 
         $($index:tt : $field:ident),*;
-        )*) => {
+     )*) => {
         
         $(impl $name {
             /// Select between elements of `then` and `else_`, based on
@@ -704,6 +704,11 @@ float_impls! {
     f64x4, 0:x0, 1:x1 , 2:x2, 3:x3;
 }
 
+pub trait FromCast<T>: Sized {
+    /// Numeric cast from `T` to `Self`.
+    fn from_cast(_: T) -> Self;
+}
+
 macro_rules! conv_impls {
     ($(
         $cvt: ident,
@@ -711,11 +716,26 @@ macro_rules! conv_impls {
         $($index:tt : $field:ident),*;
         )*) => {
             
-        $(impl $from_name {
+        $(
+        impl $from_name {
             pub fn $cvt(self) -> $to_name {
                 $to_name($(self.$index as $to_elem), *)
             }
-        })*
+        }
+
+        impl From<$from_name> for $to_name {
+            /// Warning ! The conversion can be lossy
+            fn from(source: $from_name) -> $to_name {
+                source.$cvt()
+            }
+        }
+
+        impl FromCast<$from_name> for $to_name {
+            fn from_cast(source: $from_name) -> $to_name {
+                source.$cvt()
+            }
+        }
+        )*
     }
 }
 
@@ -780,4 +800,19 @@ conv_impls! {
     to_f64, f32x2 : f32 -> f64x2 : f64,     0:x0, 1:x1;    
     to_f32, f64x4 : f64 -> f32x4 : f32,     0:x0, 1:x1, 2:x2, 3:x3;
     to_f64, f32x4 : f32 -> f64x4 : f64,     0:x0, 1:x1, 2:x2, 3:x3;
+
+    to_i32, i16x8 : i16 -> i32x8 : i32,     0:x0, 1:x1, 2:x2, 3:x3, 4:x4, 5:x5, 6:x6, 7:x7;
+    to_i32, u16x8 : u16 -> i32x8 : i32,     0:x0, 1:x1, 2:x2, 3:x3, 4:x4, 5:x5, 6:x6, 7:x7;
+    to_i32, i16x4 : i16 -> i32x4 : i32,     0:x0, 1:x1, 2:x2, 3:x3;
+    to_i32, u16x4 : u16 -> i32x4 : i32,     0:x0, 1:x1, 2:x2, 3:x3;
+
+    to_u8, i32x8 : i32 -> u8x8 : u8,     0:x0, 1:x1, 2:x2, 3:x3, 4:x4, 5:x5, 6:x6, 7:x7;
+    to_u8, u32x8 : u32 -> u8x8 : u8,     0:x0, 1:x1, 2:x2, 3:x3, 4:x4, 5:x5, 6:x6, 7:x7;
+    to_u8, i16x8 : i16 -> u8x8 : u8,     0:x0, 1:x1, 2:x2, 3:x3, 4:x4, 5:x5, 6:x6, 7:x7;
+    to_u8, u16x8 : u16 -> u8x8 : u8,     0:x0, 1:x1, 2:x2, 3:x3, 4:x4, 5:x5, 6:x6, 7:x7;
+
+    to_u8, i32x4 : i32 -> u8x4 : u8,     0:x0, 1:x1, 2:x2, 3:x3;
+    to_u8, u32x4 : u32 -> u8x4 : u8,     0:x0, 1:x1, 2:x2, 3:x3;
+    to_u8, i16x4 : i16 -> u8x4 : u8,     0:x0, 1:x1, 2:x2, 3:x3;
+    to_u8, u16x4 : u16 -> u8x4 : u8,     0:x0, 1:x1, 2:x2, 3:x3;
 }
