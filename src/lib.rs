@@ -369,42 +369,6 @@ macro_rules! basic_impls {
                 $name($(if self.$index < rhs.$index { self.$index } else {rhs.$index}),*)
             }
         })*
-        
-        /// Add trait (+)
-        $(impl Add for $name {            
-            type Output = Self;
-            #[inline(always)]
-            fn add(self, rhs: Self) -> Self {
-                $name($(self.$index + rhs.$index),*)
-            }
-        })*
-        
-        /// Sub trait (-)
-        $(impl Sub for $name {            
-            type Output = Self;
-            #[inline(always)]
-            fn sub(self, rhs: Self) -> Self {
-                $name($(self.$index - rhs.$index),*)
-            }
-        })*
-                
-        /// Mul trait (*)
-        $(impl Mul for $name {            
-            type Output = Self;
-            #[inline(always)]
-            fn mul(self, rhs: Self) -> Self {
-                $name($(self.$index * rhs.$index),*)
-            }
-        })*
-        
-        /// Div trait (/)
-        $(impl Div for $name {            
-            type Output = Self;
-            #[inline(always)]
-            fn div(self, rhs: Self) -> Self {
-                $name($(self.$index / rhs.$index),*)
-            }
-        })*
     }
 }
 
@@ -473,7 +437,45 @@ macro_rules! int_impls {
                 $name($((self.$index & then.$index) | (!self.$index & else_.$index)),*)
             }
         })*
-        
+
+
+        /// Add trait (+)
+        /// The addittion wraps over if it is over the type limits
+        $(impl Add for $name {
+            type Output = Self;
+            #[inline(always)]
+            fn add(self, rhs: Self) -> Self {
+                $name($(self.$index.wrapping_add(rhs.$index)),*)
+            }
+        })*
+
+        /// Sub trait (-)
+        $(impl Sub for $name {
+            type Output = Self;
+            #[inline(always)]
+            fn sub(self, rhs: Self) -> Self {
+                $name($(self.$index.wrapping_sub(rhs.$index)),*)
+            }
+        })*
+
+        /// Mul trait (*)
+        $(impl Mul for $name {
+            type Output = Self;
+            #[inline(always)]
+            fn mul(self, rhs: Self) -> Self {
+                $name($(self.$index.wrapping_mul(rhs.$index)),*)
+            }
+        })*
+
+        /// Div trait (/)
+        $(impl Div for $name {
+            type Output = Self;
+            #[inline(always)]
+            fn div(self, rhs: Self) -> Self {
+                $name($(self.$index.wrapping_div(rhs.$index)),*)
+            }
+        })*
+
         /// BitAnd trait (&)
         $(impl BitAnd for $name {
             type Output = Self;
@@ -674,25 +676,66 @@ macro_rules! float_impls {
         $($index:tt : $field:ident),*;
         )*) => {
         
-        $(impl $name {
-            /// Get square root
-            #[inline]
-            pub fn sqrt(self) -> Self {
-                $name($(self.$index.sqrt()),*)
-            }
+        $(
+            impl $name {
+                /// Get square root
+                #[inline]
+                pub fn sqrt(self) -> Self {
+                    $name($(self.$index.sqrt()),*)
+                }
 
-            /// Get reciprocal of square root
-            #[inline]
-            pub fn approx_rsqrt(self) -> Self {
-                $name($(1.0 / self.$index.sqrt()),*)
-            }
+                /// Get reciprocal of square root
+                #[inline]
+                pub fn approx_rsqrt(self) -> Self {
+                    $name($(1.0 / self.$index.sqrt()),*)
+                }
 
-            /// Get reciprocal
-            #[inline]
-            pub fn approx_reciprocal(self) -> Self {
-                $name($(1.0 / self.$index),*)
-            }                
-       })*
+                /// Get reciprocal
+                #[inline]
+                pub fn approx_reciprocal(self) -> Self {
+                    $name($(1.0 / self.$index),*)
+                }
+           }
+
+
+        /// Add trait (+)
+        /// The addittion wraps over if it is over the type limits
+        impl Add for $name {
+            type Output = Self;
+            #[inline(always)]
+            fn add(self, rhs: Self) -> Self {
+                $name($(self.$index + rhs.$index),*)
+            }
+        }
+
+        /// Sub trait (-)
+        impl Sub for $name {
+            type Output = Self;
+            #[inline(always)]
+            fn sub(self, rhs: Self) -> Self {
+                $name($(self.$index - rhs.$index),*)
+            }
+        }
+
+        /// Mul trait (*)
+        impl Mul for $name {
+            type Output = Self;
+            #[inline(always)]
+            fn mul(self, rhs: Self) -> Self {
+                $name($(self.$index * rhs.$index),*)
+            }
+        }
+
+        /// Div trait (/)
+        impl Div for $name {
+            type Output = Self;
+            #[inline(always)]
+            fn div(self, rhs: Self) -> Self {
+                $name($(self.$index / rhs.$index),*)
+            }
+        }
+
+       )*
     }
 }
 

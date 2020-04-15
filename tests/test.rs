@@ -30,22 +30,29 @@ fn test_shl() {
 #[test]
 fn test_shift() {
     let mut v = [0; 4];
-    (i32x4::new(1, 2, 3, 4) >> 2).store(&mut v, 0);
+    (i32x4::new(1, 2, 3, 4) >> 2).write_to_slice_aligned(&mut v);
     assert_eq!(v, [0, 0, 0, 1]);
 }
 
 #[test]
 fn test_conversion() {
     let mut v = [0; 4];
-    i32x4::from(i16x4::new(1, 2, 3, 4)).store(&mut v, 0);
+    i32x4::from(i16x4::new(1, 2, 3, 4)).write_to_slice_aligned(&mut v);
     assert_eq!(v, [1, 2, 3, 4]);
 }
 
 #[test]
 fn test_cast() {
     let mut v = [0u8; 4];
-    u8x4::from_cast(i32x4::new(1, 2, 3, 4)).store(&mut v, 0);
+    u8x4::from_cast(i32x4::new(1, 2, 3, 4)).write_to_slice_aligned(&mut v);
     assert_eq!(v, [1, 2, 3, 4]);
+}
+
+#[test]
+fn test_add_overflow() {
+    let mut v = [0u8; 4];
+    (u8x4::splat(0xFF) + u8x4::splat(1)).write_to_slice_aligned(&mut v);
+    assert_eq!(v, [0, 0, 0, 0]);
 }
 
 #[test]
