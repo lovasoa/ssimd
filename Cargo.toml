@@ -1,12 +1,12 @@
 [package]
-authors = ["Tung Duong <vn.duongthanhtung@gmail.com>"]
-description = "Simulated SIMD for Stable channel.\nEffort to make the `simd` crate work on stable channel.\n"
+authors = ["Tung Duong <vn.duongthanhtung@gmail.com>", "lovasoa"]
+description = "Simulated SIMD for Stable channel.\nEffort to make the `packed_simd` crate work on stable channel.\n"
 keywords = ["simd"]
-name = "ssimd"
+name = "simulated_packed_simd"
 readme = "README.md"
-repository = "https://github.com/vnduongthanhtung/ssimd"
+repository = "https://github.com/lovasoa/ssimd"
 license = "MIT/Apache-2.0"
-version = "0.2.0"
+version = "0.0.1"
 edition = "2018"
 
 [dependencies]

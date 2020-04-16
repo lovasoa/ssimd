@@ -1,5 +1,8 @@
 # ssimd
 
+This is a fork of the unmaintained [ssimd](https://crates.io/crates/ssimd) crate with the goal of making
+it compatible with [packed_simd](https://github.com/rust-lang/packed_simd).
+
 Simulated Simd on Rust stable channel.
 This is my effort to make the [packed-simd crate](https://github.com/rust-lang/packed_simd) work on stable channel.
 The work is based on the well-known method : auto-vectorization.
@@ -16,7 +19,7 @@ In order to make auto-vectorization successful in most of the cases, please turn
 For Rust, you can turn on the BB optimizer by building your projects with the following build command:
 
 ```
-RUSTFLAGS="-C llvm-args=-vectorize-slp-aggressive" cargo build --release
+RUSTFLAGS="-C llvm-args=--vectorize-slp -C target-cpu=native" cargo build --release
 ```
 
 ### Examples
